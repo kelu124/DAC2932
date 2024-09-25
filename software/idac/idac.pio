@@ -1,0 +1,25 @@
+.program idac
+.side_set 1
+
+pull block side 1
+out pins, 16 side 0
+
+
+% c-sdk {
+    static inline void idac_program_init(PIO pio, uint sm, uint offset, uint pin, float freq) 
+    {
+        pio_sm_config c = idac_program_get_default_config(offset);
+        for (int i = 0; i <= 12; i++) {
+            pio_gpio_init(pio, pin + i);
+            gpio_put(pin + i, false);
+        }
+        sm_config_set_out_pins(&c, pin, 13);
+        pio_sm_set_consecutive_pindirs(pio, sm, pin, 13, true);
+        sm_config_set_sideset_pins(&c, pin);
+        sm_config_set_out_shift(&c, false, false, 16);
+        float div = (clock_get_hz(clk_sys) / freq);
+        sm_config_set_clkdiv(&c, div);
+        pio_sm_init(pio, sm, offset, &c);
+        pio_sm_set_enabled(pio, sm, true);
+    }
+%}
