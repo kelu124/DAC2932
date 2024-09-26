@@ -21,7 +21,7 @@ Outputs:
 
 * Everything in `/hardware/` using classical KiCad.
 
-![](viewme.png)
+![](/docs/images/view.jpg)
 
 # Also
 
